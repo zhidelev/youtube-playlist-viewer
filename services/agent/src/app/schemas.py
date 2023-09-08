@@ -10,3 +10,9 @@ class TrimmedItem(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class Row(BaseModel):
+    id: int
+    list: str
+    processed: bool
