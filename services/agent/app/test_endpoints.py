@@ -1,6 +1,11 @@
 import pytest
+import schemathesis
 from fastapi.testclient import TestClient
+
 from .main import app
+
+# Globally enable OpenAPI 3.1 experimental feature
+schemathesis.experimental.OPEN_API_3_1.enable()
 
 
 client = TestClient(app)
@@ -24,7 +29,7 @@ def create_list_item():
 
 
 def test_add_content(create_list_item):
-    assert create_list_item.status_code == 200
+    assert create_list_item.status_code == 200, create_list_item.text
     resp = create_list_item.json()
     assert "id" in resp
     assert resp["id"] > 0
@@ -48,3 +53,14 @@ def test_list_content(create_list_item):
         assert item["processed"] is False, item
         assert "list" in item, item
         assert item["list"], item
+
+
+schema = schemathesis.from_uri(
+    "http://127.0.0.1:8000/openapi.json",
+)
+
+
+@pytest.mark.auto_generated
+@schema.parametrize()
+def test_api(case):
+    case.call_and_validate()
