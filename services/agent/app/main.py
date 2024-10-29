@@ -1,6 +1,6 @@
-from app.database import engine
-from app.models import Base
-from app.routers import data, lists
+from .database import engine
+from .models import Base
+from .data import router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -18,5 +18,4 @@ app.add_middleware(
 
 Base.metadata.create_all(bind=engine)
 
-app.include_router(data.router)
-app.include_router(lists.router)
+app.include_router(router)
