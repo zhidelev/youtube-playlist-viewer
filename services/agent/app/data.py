@@ -1,8 +1,8 @@
 from urllib.parse import urlparse
 
-import app.crud as crud
-from app.dependencies import get_db
-from app.schemas import Item, TrimmedItem
+from . import crud
+from .dependencies import get_db
+from .schemas import Item, TrimmedItem
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 

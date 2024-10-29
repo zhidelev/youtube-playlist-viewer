@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-import app.models as models
-import app.schemas as schemas
+from . import models
+from . import schemas
 
 
 def create_item(db: Session, item: schemas.Item):
