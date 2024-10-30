@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends, status, Query
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Query, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from typing import Annotated
 
 from . import crud
 from .dependencies import get_db
-from .schemas import Item, TrimmedItem, FilterParams
+from .schemas import FilterParams, Item, TrimmedItem
 
 router = APIRouter()
 
