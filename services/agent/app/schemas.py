@@ -1,8 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, HttpUrl
 
 
 class Item(BaseModel):
-    url: str
+    url: HttpUrl
 
 
 class TrimmedItem(BaseModel):
