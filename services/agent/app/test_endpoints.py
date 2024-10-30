@@ -39,13 +39,13 @@ def test_add_content(create_list_item):
     assert resp["list"] == "PL0MRiRrXAvRhuVf-g4o3IO0jmpLQgubZK"
 
 
-@pytest.mark.skip
-def test_list_content(create_list_item):
-    response = client.get("/lists")
+@pytest.mark.parametrize("skip,limit", [(0, 10), (1, 1), (0, 1)])
+def test_list_content(create_list_item, skip, limit):
+    response = client.get("/lists", params={"skip": skip, "limit": limit})
     assert response.status_code == 200
     resp = response.json()
     assert isinstance(resp, list)
-    assert len(resp) > 0
+    assert 0 < len(resp) <= limit
     for item in resp:
         assert "id" in item, item
         assert item["id"] > 0, item
@@ -53,6 +53,12 @@ def test_list_content(create_list_item):
         assert item["processed"] is False, item
         assert "list" in item, item
         assert item["list"], item
+
+
+@pytest.mark.parametrize("skip,limit", [(-1, 10), (10, -1), (9999, 101)])
+def test_list_content_negative(create_list_item, skip, limit):
+    response = client.get("/lists", params={"skip": skip, "limit": limit})
+    assert response.status_code == 422
 
 
 schema = schemathesis.from_uri(

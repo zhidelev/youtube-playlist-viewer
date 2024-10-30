@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Query, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from . import crud
 from .dependencies import get_db
-from .schemas import Item, TrimmedItem
+from .schemas import FilterParams, Item, TrimmedItem
 
 router = APIRouter()
 
@@ -25,3 +27,8 @@ def data(item: Item, db: Session = Depends(get_db)):
         d[key] = value
     t = TrimmedItem(list=d["list"])
     return crud.create_item(db=db, item=t)
+
+
+@router.get("/lists", tags=["data"])
+def get_lists(filter_query: Annotated[FilterParams, Query()], db: Session = Depends(get_db)):
+    return crud.get_items(db, skip=filter_query.skip, limit=filter_query.limit)
