@@ -15,6 +15,11 @@ router = APIRouter()
 def data(item: Item, db: Session = Depends(get_db)):
     # Example
     # https://youtube.com/playlist?list=PL0MRiRrXAvRhuVf-g4o3IO0jmpLQgubZK
+    if item.url.host != "youtube.com":
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"error": f"URL is not a YouTube playlist: {item.url}"},
+        )
     if item.url.query is None:
         return JSONResponse(
             status_code=status.HTTP_400_BAD_REQUEST,
