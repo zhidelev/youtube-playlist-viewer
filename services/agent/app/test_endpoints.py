@@ -49,6 +49,13 @@ def test_add_content_duplicates():
     assert response_duplicate.json()["id"] == initial_id
 
 
+def test_non_youtube_playlist():
+    response = client.post(
+        "/data", json={"url": "https://example.com/playlist?list=PL0MRiRrXAvRhuVf-g4o3IO0jmpLQgubZR"}
+    )
+    assert response.status_code == 400, response.text
+
+
 @pytest.mark.parametrize("skip,limit", [(0, 10), (1, 1), (0, 1)])
 def test_list_content(create_list_item, skip, limit):
     response = client.get("/lists", params={"skip": skip, "limit": limit})
