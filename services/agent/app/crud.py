@@ -5,20 +5,36 @@ from . import models, schemas
 
 def create_item(db: Session, item: schemas.TrimmedItem):
     # Checking if item is already in the database
-    result = db.query(models.Item).filter(models.Item.list == item.list).first()
+    result = db.query(models.Playlist).filter(models.Playlist.list == item.list).first()
     if result:
         return result
 
-    db_item = models.Item(list=item.list, processed=False)
+    db_item = models.Playlist(list=item.list, processed=False)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
     return db_item
 
 
+def process_item(db: Session, item: schemas.TrimmedItem):
+    db_item = db.query(models.Playlist).filter(models.Playlist.list == item.list).first()
+    db_item.processed = True
+    db.commit()
+    db.refresh(db_item)
+    return db_item
+
+
 def get_items(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Item).offset(skip).limit(limit).all()
+    return db.query(models.Playlist).offset(skip).limit(limit).all()
 
 
 def get_item(db: Session, item_id):
-    return db.query(models.Item).filter(models.Item.id == item_id).first()
+    return db.query(models.Video).filter(models.Video.list_id == item_id).all()
+
+
+def create_video(db: Session, video: schemas.VideoCreate):
+    db_video = models.Video(**video.model_dump())
+    db.add(db_video)
+    db.commit()
+    db.refresh(db_video)
+    return db_video
