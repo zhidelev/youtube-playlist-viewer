@@ -12,6 +12,21 @@ class TrimmedItem(BaseModel):
         orm_mode = True
 
 
+class VideoCreate(BaseModel):
+    youtube_id: str
+    list_id: str
+    title: str
+    description: str
+    privacy_status: str
+    view_count: int
+    like_count: int
+    dislike_count: int
+    comment_count: int
+
+    class Config:
+        orm_mode = True
+
+
 class Row(BaseModel):
     id: int
     list: str
