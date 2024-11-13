@@ -1,0 +1,17 @@
+{
+  "name": "youtube-playlist-viewer",
+  "version": "1.0.0",
+  "description": "Simple service for viewing information about Youtube playlist",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.48.2",
+    "@types/node": "^22.9.0"
+  }
+}

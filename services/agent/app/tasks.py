@@ -1,10 +1,14 @@
 import os
 
+from dotenv import load_dotenv
 from pyyoutube import Api
 from sqlalchemy.orm import Session
 
 from . import crud
 from .schemas import TrimmedItem, VideoCreate
+
+load_dotenv()
+
 
 api = Api(api_key=os.environ.get("YOUTUBE_API_KEY"))
 
