@@ -29,7 +29,12 @@ def get_items(db: Session, skip: int = 0, limit: int = 100):
 
 
 def get_item(db: Session, item_id):
-    return db.query(models.Video).filter(models.Video.list_id == item_id).all()
+    # Get max id in a table
+    max_id = db.query(models.Playlist).order_by(models.Playlist.id.desc()).first().id
+    if item_id > max_id:
+        return None
+    playlist = db.query(models.Playlist).filter(models.Playlist.id == item_id).first()
+    return db.query(models.Video).filter(models.Video.list_id == playlist.list).all()
 
 
 def create_video(db: Session, video: schemas.VideoCreate):
