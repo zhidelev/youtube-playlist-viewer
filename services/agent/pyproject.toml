@@ -13,6 +13,8 @@ sqlalchemy = "^2.0.36"
 psycopg2-binary = "^2.9.10"
 python-youtube = "^0.9.7"
 python-dotenv = "^1.0.1"
+pytest = "^8.3.3"
+pg8000 = "^1.31.2"
 
 
 [tool.poetry.group.test.dependencies]
@@ -25,6 +27,21 @@ schemathesis = "^3.38.4"
 black = "^24.10.0"
 isort = "^5.13.2"
 
+
+[tool.poetry.group.tests.dependencies]
+pytest-randomly = "^3.16.0"
+mypy = "^1.13.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.pytest.ini_options]
+addopts = "-vvv -x --ff --strict-markers"
+testpaths = ["tests"]
+markers = [
+    "api: marks tests for API endpoints",
+    "slow: tests which takes time for preparation and execution",
+    "auto_generated: tests created with schemathesis library"
+]

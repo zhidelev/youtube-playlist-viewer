@@ -8,13 +8,13 @@ class Item(BaseModel):
 class TrimmedItem(BaseModel):
     list: str
 
-    class Config:
+    class ConfigDict:
         orm_mode = True
 
 
 class VideoCreate(BaseModel):
     youtube_id: str
-    list_id: str
+    list_id: int
     title: str
     description: str
     privacy_status: str
@@ -23,7 +23,7 @@ class VideoCreate(BaseModel):
     dislike_count: int
     comment_count: int
 
-    class Config:
+    class ConfigDict:
         orm_mode = True
 
 
