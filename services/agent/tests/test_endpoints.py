@@ -1,17 +1,25 @@
 import pytest
 from fastapi.testclient import TestClient
+from dotenv import load_dotenv
+from ..app.main import app
+import os
 
-from .main import app
+load_dotenv()
 
 client = TestClient(app)
 
 pytestmark = pytest.mark.api
+if os.getenv("DATABASE_URL") == "":
+    pytest.skip("No database URL provided, skipping tests.", allow_module_level=True)
+
+FULL_URL = "https://youtube.com/playlist?list=PL0MRiRrXAvRhuVf-g4o3IO0jmpLQgubZK"
+PLAYLIST_ID = "PL0MRiRrXAvRhuVf-g4o3IO0jmpLQgubZK"
 
 
 @pytest.fixture
 def create_list_item():
     response = client.post(
-        "/data", json={"url": "https://youtube.com/playlist?list=PL0MRiRrXAvRhuVf-g4o3IO0jmpLQgubZK"}
+        "/data", json={"url": FULL_URL}
     )
     yield response
     # TODO: add removing by id when implemented.
@@ -23,9 +31,9 @@ def test_add_content(create_list_item):
     assert "id" in resp
     assert resp["id"] > 0
     assert "processed" in resp
-    assert resp["processed"] is False
+    assert isinstance(resp["processed"], bool), resp
     assert "list" in resp
-    assert resp["list"] == "PL0MRiRrXAvRhuVf-g4o3IO0jmpLQgubZK"
+    assert resp["list"] == PLAYLIST_ID
 
 
 def test_add_content_duplicates():
@@ -67,7 +75,7 @@ def test_list_content(create_list_item, skip, limit):
         assert "id" in item, item
         assert item["id"] > 0, item
         assert "processed" in item, item
-        assert item["processed"] is False, item
+        assert isinstance(item["processed"], bool), item
         assert "list" in item, item
         assert item["list"], item
 

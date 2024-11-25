@@ -70,3 +70,8 @@ def get_list(list_id: str, db: Session = Depends(get_db)):
             content={"error": f"List with ID {list_id} not found"},
         )
     return result
+
+
+@router.get("/recommendations/{list_id}", tags=["recommendations"])
+def get_recommendations_for_playlist(list_id: str, db: Session = Depends(get_db)):
+    return crud.get_videos(db, list_id)
